@@ -1,0 +1,96 @@
+/* Landing page (BI4BI) styles */
+
+html, body, .stApp {
+    background-color: #ffffff !important;
+}
+
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
+
+/* Full height for vertical centering */
+.main .block-container {
+    min-height: 100vh;
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+section.main > div {
+    padding-top: 0;
+}
+
+.center-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Card = ONE div we control – strict RECTANGLE (sharp corners, no radius) */
+.landing-card {
+    background: #ffffff !important;
+    border-radius: 0 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    padding: 5rem 5rem !important;
+    max-width: 860px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* Title */
+.landing-card .title {
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 2rem 0;
+    line-height: 1.1;
+}
+
+/* Description */
+.landing-card .desc {
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Begin button (link styled as button) – rectangle, black text */
+.begin-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffd54f 0%, #ffb74d 50%, #ff8f00 100%) !important;
+    color: #1a1a1a !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 1.1rem 3.5rem;
+    border-radius: 0 !important;
+    border: none;
+    box-shadow: 0 4px 20px rgba(255, 140, 0, 0.35);
+    transition: 0.25s;
+    text-decoration: none !important;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.begin-btn:hover {
+    background: linear-gradient(90deg, #ffe082 0%, #ffcc80 50%, #ffa726 100%) !important;
+    transform: scale(1.03);
+    box-shadow: 0 6px 24px rgba(255, 140, 0, 0.4);
+    color: #1a1a1a !important;
+}
+
+/* Footer */
+.landing-card .footer {
+    margin-top: 3rem;
+    font-size: 1rem;
+    color: #666666;
+}
