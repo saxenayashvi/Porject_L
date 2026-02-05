@@ -1,105 +1,150 @@
 import streamlit as st
-from pathlib import Path
+import base64
+import streamlit.components.v1 as components
 
-# ---------------- PAGE CONFIG (must be first) ----------------
 st.set_page_config(
     page_title="BI4BI - EY Landing Page",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed"
 )
 
-# ---------------- LOAD CSS (by page) ----------------
-def load_css(file_path: Path) -> None:
-    if file_path.exists():
-        with file_path.open("r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+def get_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
-BASE = Path(__file__).parent
+bg = get_base64("background.png")
+logo = get_base64("ey_logo.png")
 
-# ---------------- SESSION STATE: which page to show ----------------
-if "page" not in st.session_state:
-    st.session_state["page"] = "home"
+html_code = f"""
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-# Navigate to Choose Tool when "Begin" link is clicked (query param)
-if st.query_params.get("page") == "choose_tool" and st.session_state.get("page") != "choose_tool":
-    st.session_state["page"] = "choose_tool"
-    st.query_params.clear()
-    st.rerun()
+<style>
+* {{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}}
 
-current_page = st.session_state["page"]
+html, body {{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}}
 
-# Load the right CSS for the current page
-if current_page == "home":
-    load_css(BASE / "style.css")
-else:
-    load_css(BASE / "static" / "styles.css")
+body {{
+    background: url("data:image/png;base64,{bg}") no-repeat center center fixed;
+    background-size: cover;
+}}
 
-# ---------------- RENDER: LANDING PAGE (BI4BI) – single HTML card (rectangle) ----------------
-if current_page == "home":
-    st.markdown('<div class="center-wrapper">', unsafe_allow_html=True)
+/* HEADER */
+.header {{
+    position: fixed;
+    top: 30px;
+    left: 60px;
+    right: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}}
 
-    col_left, col_center, col_right = st.columns([1, 2.5, 1])
+.title {{
+    font-size: 26px;
+    font-weight: 600;
+    color: #000;
+}}
 
-    with col_center:
-        # Entire card as ONE div so we control shape (strict rectangle)
-        st.markdown(
-            """
-            <div class="landing-card">
-                <div class="title">BI4BI</div>
-                <div class="desc">
-                    BI4BI helps analyze existing BI reports, identify redundancies,
-                    and provide recommendations to rationalize and modernize<br>
-                    legacy BI environments using metadata-driven insights.
-                </div>
-                <a href="?page=choose_tool" class="begin-btn">Begin-&gt;</a>
-                <div class="footer">©️ 2024 EYGM Limited. All Rights Reserved.</div>
+.logo img {{
+    width: 140px;
+}}
+
+/* CENTER CARD */
+.center {{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}}
+
+.card {{
+    background: white;
+    width: 460px;
+    padding: 42px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    text-align: center;
+}}
+
+.card h1 {{
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+}}
+
+/* TEXT CONTENT */
+.desc {{
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}}
+
+/* BUTTON */
+.begin {{
+    background: #FFD100;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+}}
+
+.begin:hover {{
+    background: #f2c400;
+}}
+
+/* FOOTER */
+.footer {{
+    margin-top: 24px;
+    font-size: 12px;
+    color: #999;
+}}
+</style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">BI4BI – EY Landing Page</div>
+        <div class="logo">
+            <img src="data:image/png;base64,{logo}" />
+        </div>
+    </div>
+
+    <div class="center">
+        <div class="card">
+            <h1>BI4BI</h1>
+
+            <p class="desc">
+                abcd texttt paragraph abcd texttt paragraph abcd texttt paragraph.
+                This text is only for demonstration and layout purposes.
+                It represents static informational content on the BI4BI landing page
+                without any form inputs or user interaction.
+            </p>
+
+            <button class="begin">Begin</button>
+
+            <div class="footer">
+                © 2024 EYGM Limited. All Rights Reserved.
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+    </div>
+</body>
+</html>
+"""
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# ---------------- RENDER: CHOOSE TOOL PAGE ----------------
-else:
-    st.markdown("# Choose Tool")
-
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("Tableau"):
-            st.session_state["selected_tool"] = "Tableau"
-            st.rerun()
-    with col2:
-        if st.button("Oracle"):
-            st.session_state["selected_tool"] = "Oracle"
-            st.rerun()
-    with col3:
-        if st.button("Power BI"):
-            st.session_state["selected_tool"] = "Power BI"
-            st.rerun()
-
-    col4, col5, col6 = st.columns(3)
-    with col4:
-        if st.button("SAP"):
-            st.session_state["selected_tool"] = "SAP"
-            st.rerun()
-    with col5:
-        if st.button("Qlik"):
-            st.session_state["selected_tool"] = "Qlik"
-            st.rerun()
-    with col6:
-        if st.button("Looker"):
-            st.session_state["selected_tool"] = "Looker"
-            st.rerun()
-
-    st.markdown("<div style='height: 2rem;'></div>", unsafe_allow_html=True)
-    back_left, back_center, back_right = st.columns(3)
-    with back_center:
-        if st.button("← Back to Home"):
-            st.session_state["page"] = "home"
-            if "selected_tool" in st.session_state:
-                del st.session_state["selected_tool"]
-            st.rerun()
-
-    if st.session_state.get("selected_tool"):
-        st.success(f"You selected **{st.session_state['selected_tool']}**")
+components.html(html_code, height=900, scrolling=False)
